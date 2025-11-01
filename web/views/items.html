@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Items - The Binding of Isaac</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <h1>The Binding of Isaac Repentance</h1>
+    <nav>
+      <a href="/">Inicio</a>
+      <a href="/items">Items</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>Lista de Items</h2>
+      <p>Busca tus items favoritos usando la barra de búsqueda:</p>
+      <input type="text" id="search-bar" placeholder="Buscar item...">
+    </section>
+
+    <section class="image-section" id="items-container">
+      <!-- Los items se cargarán aquí dinámicamente -->
+    </section>
+  </main>
+
+  <footer>
+    <p>Hecho con ❤️ por un fan de Isaac</p>
+  </footer>
+
+  <script>
+    const searchBar = document.getElementById('search-bar');
+    const itemsContainer = document.getElementById('items-container');
+    let allItems = [];
+
+    // --- 🔧 Función para generar tooltip mostrando solo valores, saltos de línea ---
+    function createTooltip(item) {
+      const values = Object.entries(item)
+        .slice(3) // eliminamos los dos primeros atributos (_id y item-title), 3 porque hay q quitar el id de mongo
+        .map(([key, value]) => {
+          if (value === null || value === undefined) value = '';
+          return String(value).replace(/"/g, "'"); // reemplaza comillas dobles
+        });
+      return values.join('\n'); // salto de línea entre cada valor
+    }
+
+    // --- 🔄 Función para renderizar items ---
+    function renderItems(items) {
+      itemsContainer.innerHTML = ''; // limpiar contenedor
+      items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'item-card';
+        
+        // Ruta de la imagen basada en item-title
+        const imageName = encodeURIComponent(item['item-title']) + '.png';
+        const imagePath = `/images/items/${imageName}`;
+
+        // Tooltip seguro con solo valores
+        const tooltip = createTooltip(item);
+        
+        card.innerHTML = `
+          <img src="${imagePath}" alt="${item['item-title']}" title="${tooltip}">
+          <p>${item['item-title']}</p>
+        `;
+        itemsContainer.appendChild(card);
+      });
+    }
+
+    // --- 🌐 Cargar items desde la API ---
+    async function loadItems() {
+      try {
+        const res = await fetch('/api/items');
+        allItems = await res.json();
+        renderItems(allItems);
+      } catch (err) {
+        console.error('Error al cargar items:', err);
+        itemsContainer.innerHTML = '<p>No se pudieron cargar los items.</p>';
+      }
+    }
+
+    loadItems();
+
+    // --- 🔎 Buscador dinámico ---
+    searchBar.addEventListener('input', () => {
+      const query = searchBar.value.toLowerCase();
+      const filtered = allItems.filter(item => item['item-title'].toLowerCase().includes(query));
+      renderItems(filtered);
+    });
+  </script>
+</body>
+</html>

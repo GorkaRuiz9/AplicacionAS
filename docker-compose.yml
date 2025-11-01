@@ -1,0 +1,22 @@
+services:
+  web:
+    build: ./web/
+    container_name: miweb-node
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./web:/web   #Tenerlo activo provoca borrar la carpeta node_modules del contenedor
+      - /web/node_modules #Esto habría que quitarlo para producción
+    environment:
+      - NODE_ENV=development
+    
+
+  mongo:
+    build: ./mongo
+    container_name: mi-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin  #Esto poner como secreto en producción
+      - MONGO_INITDB_ROOT_PASSWORD=secret123
+      - MONGO_INITDB_DATABASE=mi_basedatos

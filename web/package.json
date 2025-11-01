@@ -1,0 +1,12 @@
+{
+  "name": "miweb-node",
+  "version": "1.0.0",
+  "main": "web/index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",   
+    "mongodb": "^5.7.0"
+  }
+}

@@ -1,0 +1,99 @@
+body {
+  font-family: 'Trebuchet MS', sans-serif;
+  background-color: #1a1a1a;
+  color: #eee;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #2a2a2a;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  border-bottom: 2px solid #444;
+}
+
+header h1 {
+  color: #e63946;
+  font-size: 2em;
+}
+
+nav a {
+  color: #ddd;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: bold;
+}
+
+nav a:hover {
+  color: #e63946;
+}
+
+main {
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.intro h2 {
+  color: #e63946;
+  margin-bottom: 20px;
+}
+
+.image-section {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* Permite varias imágenes en fila y que bajen a la siguiente línea si no caben */
+  gap: 20px;       /* Espacio entre imágenes */
+  margin-top: 30px;
+}
+
+.image-section img {
+  width: 800px;              /* Más grande */
+  max-width: 250%;            /* Que no desborde en móviles */
+  height: auto;              /* Mantener proporción */
+  border-radius: 10px;
+  border: 2px solid #e63946;
+  box-shadow: 0 0 20px #e63946;
+  transition: transform 0.3s, box-shadow 0.3s; /* Animación al hacer hover */
+}
+
+.image-section img:hover {
+  transform: scale(1.1);     /* Aumenta ligeramente al pasar el ratón */
+  box-shadow: 0 0 30px #e63946;
+}
+
+footer {
+  background-color: #2a2a2a;
+  padding: 15px;
+  text-align: center;
+  color: #888;
+  border-top: 2px solid #444;
+}
+
+.item-card {
+  width: 200px;
+  margin: 15px;
+  text-align: center;
+}
+
+.item-card img {
+  width: 150px;
+  height: auto;
+  border-radius: 10px;
+  border: 2px solid #e63946;
+  box-shadow: 0 0 15px #e63946;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.item-card img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 25px #e63946;
+}
+
+#items-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
