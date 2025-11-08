@@ -39,7 +39,7 @@
     // --- 🔧 Función para generar tooltip mostrando solo valores, saltos de línea ---
     function createTooltip(item) {
       const values = Object.entries(item)
-        .slice(3) // eliminamos los dos primeros atributos (_id y item-title), 3 porque hay q quitar el id de mongo
+        .slice(2) // eliminamos los dos primeros atributos (_id y item-title)
         .map(([key, value]) => {
           if (value === null || value === undefined) value = '';
           return String(value).replace(/"/g, "'"); // reemplaza comillas dobles
@@ -72,8 +72,9 @@
     // --- 🌐 Cargar items desde la API ---
     async function loadItems() {
       try {
-        const res = await fetch('/api/items');
-        allItems = await res.json();
+        const res = await fetch('http://localhost:8000/items'); 
+        const data = await res.json();
+        allItems = data;                              
         renderItems(allItems);
       } catch (err) {
         console.error('Error al cargar items:', err);

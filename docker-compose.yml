@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   web:
     build: ./web/
@@ -5,18 +7,28 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./web:/web   #Tenerlo activo provoca borrar la carpeta node_modules del contenedor
-      - /web/node_modules #Esto habría que quitarlo para producción
+      - ./web:/web   # Solo para desarrollo
+      - /web/node_modules
+    depends_on:
+      - api
+      - mongo
+
+  api:
+    build: ./api/
+    container_name: isaac-api
+    ports:
+      - "8000:8000" 
     environment:
-      - NODE_ENV=development
-    
+      - MONGO_URI=${MONGO_URI}
+      - DB_NAME=${DB_NAME}
+      - COLLECTION_NAME=${COLLECTION_NAME}
+    depends_on:
+      - mongo
 
   mongo:
-    build: ./mongo
+    build: ./mongo/
     container_name: mi-mongo
-    ports:
-      - "27017:27017"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin  #Esto poner como secreto en producción
-      - MONGO_INITDB_ROOT_PASSWORD=secret123
-      - MONGO_INITDB_DATABASE=mi_basedatos
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
