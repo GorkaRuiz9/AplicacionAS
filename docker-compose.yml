@@ -9,6 +9,8 @@ services:
     #volumes: # Solo para desarrollo
      # - ./web:/web   
       #- /web/node_modules
+    environment:
+      - API_URL=${API_URL}
     depends_on:
       - api
       - mongo

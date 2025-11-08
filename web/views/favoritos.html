@@ -12,7 +12,7 @@
     <nav>
       <a href="/">Inicio</a>
       <a href="/items">Items</a>
-      <a href="/favoritos">Favoritos</a> <!-- Nueva sección -->
+      <a href="/favoritos">Favoritos</a>
     </nav>
   </header>
 
@@ -31,6 +31,11 @@
   <footer>
     <p>Hecho con ❤️ por un fan de Isaac</p>
   </footer>
+
+  <!-- 🌍 Variable inyectada desde el servidor Node -->
+  <script>
+    const API_URL = "__API_URL__";
+  </script>
 
   <script>
     const searchBar = document.getElementById('search-bar');
@@ -78,7 +83,7 @@
     // --- Cargar favoritos desde la API ---
     async function loadFavorites() {
       try {
-        const res = await fetch('http://localhost:8000/favoritos'); 
+        const res = await fetch(`${API_URL}/favoritos`);
         const data = await res.json();
         allFavorites = data;
         renderFavorites(allFavorites);
