@@ -1,5 +1,7 @@
-# AplicacionAS
+### Añadir url API
 
-Falta cambiar el compose pa añadir un depends on, pa q web no se inicie sin mongo
+En caso de querer correr la aplicación en un sistema que no sea local, ya sea alguna instancia virtual o servidor en la nube, añadir la siguiente linea con su ip en el siguiente archivo:
 
-Tema variables de entorno en compose y web: .env o así, mirar permisos
+```python
+echo "API_URL=http://<TU-IP>:8000" >> .env
+```
