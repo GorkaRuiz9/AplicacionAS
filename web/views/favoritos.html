@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Binding of Isaac - Favoritos</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <h1>The Binding of Isaac Repentance</h1>
+    <nav>
+      <a href="/">Inicio</a>
+      <a href="/items">Items</a>
+      <a href="/favoritos">Favoritos</a> <!-- Nueva sección -->
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>Mis Items Favoritos</h2>
+      <p>Consulta los items que has guardado como favoritos:</p>
+      <input type="text" id="search-bar" placeholder="Buscar favorito...">
+    </section>
+
+    <section class="image-section" id="favorites-container">
+      <!-- Los favoritos se cargarán aquí dinámicamente -->
+    </section>
+  </main>
+
+  <footer>
+    <p>Hecho con ❤️ por un fan de Isaac</p>
+  </footer>
+
+  <script>
+    const searchBar = document.getElementById('search-bar');
+    const favoritesContainer = document.getElementById('favorites-container');
+    let allFavorites = [];
+
+    // --- Función para generar tooltip mostrando valores ---
+    function createTooltip(item) {
+      const values = Object.entries(item)
+        .slice(1) // eliminamos _id si existe
+        .map(([key, value]) => {
+          if (value === null || value === undefined) value = '';
+          return String(value).replace(/"/g, "'"); // reemplaza comillas dobles
+        });
+      return values.join('\n');
+    }
+
+    // --- Renderizar favoritos ---
+    function renderFavorites(favorites) {
+      favoritesContainer.innerHTML = '';
+
+      favorites.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'item-card';
+
+        // Imagen
+        const imageName = encodeURIComponent(item['item-title']) + '.png';
+        const imagePath = `/images/items/${imageName}`;
+        const img = document.createElement('img');
+        img.src = imagePath;
+        img.alt = item['item-title'];
+        img.title = createTooltip(item);
+
+        // Título
+        const title = document.createElement('p');
+        title.textContent = item['item-title'];
+
+        card.appendChild(img);
+        card.appendChild(title);
+
+        favoritesContainer.appendChild(card);
+      });
+    }
+
+    // --- Cargar favoritos desde la API ---
+    async function loadFavorites() {
+      try {
+        const res = await fetch('http://localhost:8000/favoritos'); 
+        const data = await res.json();
+        allFavorites = data;
+        renderFavorites(allFavorites);
+      } catch (err) {
+        console.error('Error al cargar favoritos:', err);
+        favoritesContainer.innerHTML = '<p>No se pudieron cargar los favoritos.</p>';
+      }
+    }
+
+    loadFavorites();
+
+    // --- Buscador dinámico ---
+    searchBar.addEventListener('input', () => {
+      const query = searchBar.value.toLowerCase();
+      const filtered = allFavorites.filter(item => item['item-title'].toLowerCase().includes(query));
+      renderFavorites(filtered);
+    });
+  </script>
+</body>
+</html>

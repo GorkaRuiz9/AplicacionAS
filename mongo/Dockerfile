@@ -5,7 +5,7 @@ FROM mongo:7.0
 WORKDIR /data
 
 # Copiamos el CSV
-COPY ./data/* .
+COPY ./csvs/* .
 
 # Copiamos los scripts de inicialización
 COPY ./init/* /docker-entrypoint-initdb.d/

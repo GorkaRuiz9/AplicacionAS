@@ -5,7 +5,7 @@ echo "Importando CSV a MongoDB..."
 
 # Variables
 DB_NAME=${MONGO_INITDB_DATABASE:-mi_basedatos}
-COLLECTION_NAME=mi_coleccion
+COLLECTION_NAME=items
 DATA_DIR=/data
 USER=${MONGO_INITDB_ROOT_USERNAME:-admin}
 PASS=${MONGO_INITDB_ROOT_PASSWORD:-secret123}

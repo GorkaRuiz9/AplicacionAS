@@ -12,6 +12,7 @@
     <nav>
       <a href="/">Inicio</a>
       <a href="/items">Items</a>
+      <a href="/favoritos">Favoritos</a> <!-- Añadido -->
     </nav>
   </header>
 
@@ -36,45 +37,49 @@
     const itemsContainer = document.getElementById('items-container');
     let allItems = [];
 
-    // --- 🔧 Función para generar tooltip mostrando solo valores, saltos de línea ---
     function createTooltip(item) {
       const values = Object.entries(item)
-        .slice(2) // eliminamos los dos primeros atributos (_id y item-title)
+        .slice(2)
         .map(([key, value]) => {
           if (value === null || value === undefined) value = '';
-          return String(value).replace(/"/g, "'"); // reemplaza comillas dobles
+          return String(value).replace(/"/g, "'");
         });
-      return values.join('\n'); // salto de línea entre cada valor
+      return values.join('\n');
     }
 
-    // --- 🔄 Función para renderizar items ---
     function renderItems(items) {
-      itemsContainer.innerHTML = ''; // limpiar contenedor
+      itemsContainer.innerHTML = '';
       items.forEach(item => {
         const card = document.createElement('div');
         card.className = 'item-card';
-        
-        // Ruta de la imagen basada en item-title
+
         const imageName = encodeURIComponent(item['item-title']) + '.png';
         const imagePath = `/images/items/${imageName}`;
+        const img = document.createElement('img');
+        img.src = imagePath;
+        img.alt = item['item-title'];
+        img.title = createTooltip(item);
 
-        // Tooltip seguro con solo valores
-        const tooltip = createTooltip(item);
-        
-        card.innerHTML = `
-          <img src="${imagePath}" alt="${item['item-title']}" title="${tooltip}">
-          <p>${item['item-title']}</p>
-        `;
+        const title = document.createElement('p');
+        title.textContent = item['item-title'];
+
+        const favBtn = document.createElement('button');
+        favBtn.textContent = '❤️ Favorito';
+        favBtn.addEventListener('click', () => addToFavorites(item));
+
+        card.appendChild(img);
+        card.appendChild(title);
+        card.appendChild(favBtn);
+
         itemsContainer.appendChild(card);
       });
     }
 
-    // --- 🌐 Cargar items desde la API ---
     async function loadItems() {
       try {
         const res = await fetch('http://localhost:8000/items'); 
         const data = await res.json();
-        allItems = data;                              
+        allItems = data;
         renderItems(allItems);
       } catch (err) {
         console.error('Error al cargar items:', err);
@@ -84,12 +89,28 @@
 
     loadItems();
 
-    // --- 🔎 Buscador dinámico ---
     searchBar.addEventListener('input', () => {
       const query = searchBar.value.toLowerCase();
       const filtered = allItems.filter(item => item['item-title'].toLowerCase().includes(query));
       renderItems(filtered);
     });
+
+    async function addToFavorites(item) {
+      try {
+        const res = await fetch('http://localhost:8000/favoritos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(item)
+        });
+
+        if (!res.ok) throw new Error('El item ya está guardado en favoritos');
+
+        alert(`Item "${item['item-title']}" guardado en favoritos ✅`);
+      } catch (err) {
+        console.error(err);
+        alert('El item ya está guardado en favoritos');
+      }
+    }
   </script>
 </body>
 </html>
