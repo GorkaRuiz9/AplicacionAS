@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   web:
     build: ./web/
@@ -23,6 +21,9 @@ services:
     environment:
       - MONGO_URI=${MONGO_URI}
       - DB_NAME=${DB_NAME}
+      - RABBIT_HOST=${RABBIT_HOST}
+      - RABBIT_USER=${RABBIT_USER}
+      - RABBIT_PASS=${RABBIT_PASS}
     depends_on:
       - mongo
 
@@ -35,3 +36,23 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
       - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"     # puerto para que los contenedores se conecten
+      - "15672:15672"   # interfaz web de administración
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBIT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBIT_PASS}
+
+  predictor:
+    build: ./predictor
+    container_name: isaac-predictor
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBIT_HOST=${RABBIT_HOST}
+      - RABBIT_USER=${RABBIT_USER}
+      - RABBIT_PASS=${RABBIT_PASS}

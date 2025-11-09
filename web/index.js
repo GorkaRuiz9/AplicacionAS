@@ -21,6 +21,7 @@ function sendHtmlWithEnv(res, fileName) {
 app.get('/', (req, res) => sendHtmlWithEnv(res, 'index.html'));
 app.get('/items', (req, res) => sendHtmlWithEnv(res, 'items.html'));
 app.get('/favoritos', (req, res) => sendHtmlWithEnv(res, 'favoritos.html'));
+app.get('/predictor', (req, res) => sendHtmlWithEnv(res, 'predictor.html'));
 
 // --- Lanzar servidor ---
 app.listen(PORT, () => {

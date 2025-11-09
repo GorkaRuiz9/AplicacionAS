@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Binding of Isaac - Predictor</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <h1>The Binding of Isaac Repentance</h1>
+    <nav>
+      <a href="/">Inicio</a>
+      <a href="/items">Items</a>
+      <a href="/favoritos">Favoritos</a>
+      <a href="/predictor">Predictor</a> 
+    </nav>
+  </header>
+
+  <main>
+    <section class="predictor-section">
+      <h2>Predictor de Items</h2>
+      <p>Introduce tus items actuales y estado del jugador para obtener recomendaciones:</p>
+
+      <div class="predictor-container">
+        <!-- Formulario -->
+        <div class="predictor-form">
+          <form id="predictor-form">
+            <label for="current_items">Items actuales (separados por comas):</label><br>
+            <input type="text" id="current_items" name="current_items" placeholder="Brimstone, Polyphemus"><br>
+
+            <label for="health">Salud:</label><br>
+            <input type="number" id="health" name="health" min="0" max="12" value="3"><br>
+
+            <label for="floor">Piso:</label><br>
+            <input type="number" id="floor" name="floor" min="1" value="1"><br>
+
+            <label for="context">Contexto adicional:</label><br>
+            <input type="text" id="context" name="context" placeholder="Jefe en la sala, power-ups disponibles"><br>
+
+            <button type="submit">Obtener recomendación</button>
+          </form>
+        </div>
+
+        <!-- Resultado -->
+        <div class="predictor-result" id="prediction-result">
+          Esperando input...
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Hecho con ❤️ por un fan de Isaac</p>
+  </footer>
+
+  <script>
+    const API_URL = "__API_URL__";
+    const form = document.getElementById('predictor-form');
+    const resultDiv = document.getElementById('prediction-result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const current_items = document.getElementById('current_items').value.split(',').map(i => i.trim());
+      const health = parseInt(document.getElementById('health').value);
+      const floor = parseInt(document.getElementById('floor').value);
+      const context = document.getElementById('context').value;
+
+      const payload = {
+        current_items: current_items,
+        player_status: { health, floor },
+        context: context
+      };
+
+      resultDiv.innerHTML = "Generando recomendación...";
+
+      try {
+        const response = await fetch(`${API_URL}/predictor`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error(`Error: ${response.status}`);
+
+        const data = await response.json();
+        resultDiv.innerHTML = data; // texto plano
+      } catch (err) {
+        resultDiv.innerHTML = `<span style="color:red;">${err.message}</span>`;
+      }
+    });
+  </script>
+</body>
+</html>

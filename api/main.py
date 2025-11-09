@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import items, favoritos
+from routers import items, favoritos, predictor
 
 app = FastAPI()
 
@@ -15,3 +15,4 @@ app.add_middleware(
 # --- 🔗 Incluir router ---
 app.include_router(items.router, prefix="/items")
 app.include_router(favoritos.router, prefix="/favoritos")
+app.include_router(predictor.router, prefix="/predictor")
