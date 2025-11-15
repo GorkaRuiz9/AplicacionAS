@@ -33,8 +33,9 @@ Luego, abre el archivo .env con tu editor favorito y rellena los siguientes camp
 MONGO_INITDB_ROOT_PASSWORD=
 RABBIT_USER=
 RABBIT_PASS=
+MONGO_URI=mongodb://admin:<TU-CONTRASEÑA>@mongo:27017/isaac_db?authSource=admin
 ```
-(Da bastante igual lo que pongas, ya que la aplicación no está pensada para que se usen desde fuera)
+(Da bastante igual lo que pongas, ya que la aplicación no está pensada para que se usen desde fuera. Eso si, la contraseña de mongo debe coincidir con la contraseña a poner en la variable MONGO_URI)
 
 ⚠️ Si no estás ejecutando la aplicación localmente, descomenta la línea correspondiente y agrega tu IP:
 ```text
