@@ -12,7 +12,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- 🔗 Incluir router ---
+# Incluir routers
 app.include_router(items.router, prefix="/items")
 app.include_router(favoritos.router, prefix="/favoritos")
 app.include_router(predictor.router, prefix="/predictor")

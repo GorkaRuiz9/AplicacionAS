@@ -8,7 +8,7 @@ RABBIT_HOST = os.getenv("RABBIT_HOST")
 RABBIT_USER = os.getenv("RABBIT_USER")
 RABBIT_PASS = os.getenv("RABBIT_PASS")
 
-# Lista de items de calidad 4 (ejemplo, puedes completarla)
+# Lista de items de calidad 4
 QUALITY_4_ITEMS = [
     "Brimstone", "Polyphemus", "Sacred Heart", "Godhead",
     "Mega Blast", "Mom's Knife", "The Mind", "The Body",
